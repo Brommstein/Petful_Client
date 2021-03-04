@@ -1,0 +1,99 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+}
+
+hr {
+  width: 60%;
+  border: 1px solid rgb(221, 221, 221);
+}
+
+section {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+}
+
+.pet-container > img {
+  width: 95%;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.pets-section {
+  flex-direction: column;
+  display: flex;
+}
+
+.button-wrapper {
+  text-align: center;
+  margin: 10px;
+  margin-top: 75px;
+}
+
+.pet-container {
+  word-wrap: break-word;
+  text-align: center;
+  padding: 4px;
+}
+
+.pet-container > span {
+  font-size: 28px;
+}
+
+.words-container {
+  text-align: left;
+  padding: 15px;
+}
+
+.selected {
+  border: 4px rgb(197, 255, 197) solid;
+}
+
+.unselected {
+  border: 4px rgb(255, 255, 255) solid;
+}
+
+.myButton {
+  box-shadow: inset 0px 1px 0px 0px #ffffff;
+  background: linear-gradient(to bottom, #ffffff 5%, #f6f6f6 100%);
+  background-color: #ffffff;
+  border-radius: 6px;
+  border: 1px solid #dcdcdc;
+  display: inline-block;
+  cursor: pointer;
+  color: #666666;
+  font-family: Arial;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 6px 24px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #ffffff;
+}
+.myButton:hover {
+  background: linear-gradient(to bottom, #f6f6f6 5%, #ffffff 100%);
+  background-color: #f6f6f6;
+}
+.myButton:active {
+  position: relative;
+  top: 1px;
+}
+
+.myButton:disabled {
+  color: rgb(199, 199, 199);
+}
+
+@media all and (min-width: 600px) {
+  section {
+    flex-direction: row;
+  }
+
+  .pets-section {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .pet-container {
+    flex: 1;
+  }
+}

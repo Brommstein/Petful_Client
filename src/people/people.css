@@ -1,0 +1,31 @@
+.people-container {
+  border: 3px solid rgb(231, 231, 231);
+  padding: 18px;
+  margin: 6px;
+  font-weight: bold;
+}
+
+form {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+form > button {
+  margin-top: 10px;
+}
+
+form > input {
+  margin-top: 10px;
+  width: 100%;
+}
+
+.addbutton {
+  margin-top: 80%;
+}
+
+@media all and (min-width: 600px) {
+  .people-container {
+    flex: 2;
+    min-width: 160px;
+  }
+}
