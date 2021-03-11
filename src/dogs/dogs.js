@@ -1,5 +1,8 @@
 import React from 'react';
 
+let nextPup;
+let dogs;
+
 class Dogs extends React.Component {
   render() {
     const selected = () => {
@@ -9,36 +12,48 @@ class Dogs extends React.Component {
         return 'unselected';
       }
     };
-    const dogs = this.props.dogs.first.data;
-    const nextPup = (
-      <div className={`pet-container ${selected()}`}>
-        <span>Pupper Name: {dogs.name}</span>
-        <br />
-        <img src={dogs.imageURL} alt="A heartwarming, picturesque dog" />
-        <br />
-        <div className="words-container">
-          Age: {dogs.age}
+    if (this.props.dogs.last !== null) dogs = this.props.dogs.first.data;
+    if (this.props.dogs.last === null) dogs = null;
+
+    if (dogs !== null) {
+      dogs = this.props.dogs.first.data;
+      nextPup = (
+        <div className={`pet-container ${selected()}`}>
+          <span>Pupper Name: {dogs.name}</span>
           <br />
+          <img src={dogs.imageURL} alt="A heartwarming, picturesque dog" />
+          <br />
+          <div className="words-container">
+            Age: {dogs.age}
+            <br />
           Story: {dogs.story}
-          <br />
+            <br />
           Breed: {dogs.breed}
-          <br />
+            <br />
           Gender: {dogs.gender}
-          <br />
+            <br />
           Description: {dogs.description}
+          </div>
+          <br />
+          {this.props.usersTurn && (
+            <button
+              className="myButton"
+              type="button"
+              onClick={() => this.props.handleDogAdopt()}
+            >
+              Adopt
+            </button>
+          )}
         </div>
-        <br />
-        {this.props.usersTurn && (
-          <button
-            className="myButton"
-            type="button"
-            onClick={() => this.props.handleDogAdopt()}
-          >
-            Adopt
-          </button>
-        )}
-      </div>
-    );
+      );
+    }
+    if (dogs === null) {
+      nextPup = (
+        <div className={`pet-container ${selected()}`}>
+          <h3>No more dogs available for adoption!</h3>
+        </div>
+      );
+    }
     return <>{nextPup}</>;
   }
 }

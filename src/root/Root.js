@@ -6,8 +6,11 @@ import People from '../people/people';
 import ApiHelpers from '../helpers/api_helpers';
 import { Route } from 'react-router-dom';
 import LandingPage from '../LandingPage/LandingPage';
+import randomPet from '../randomize/randomPet';
+import randomPerson from '../randomize/randomPerson';
 
 import './root.css';
+
 
 class Root extends React.Component {
   state = {
@@ -17,6 +20,7 @@ class Root extends React.Component {
     cat_adopt: false,
     personListUpdated: false,
     usersTurn: false,
+    adoptionStatus: ''
   };
 
   handleDogAdopt = () => {
@@ -31,64 +35,80 @@ class Root extends React.Component {
     this.setState({ personListUpdated: !this.state.personListUpdated });
   };
 
-  handleUpdateUsersTurn = () => {
-    this.setState({ usersTurn: true });
+  handleUpdateUsersTurn = async () => {
+    await this.setState({ usersTurn: true });
   };
 
-  handleStartDemo = () => {
-    setTimeout(() => {
-      this.handleCatAdopt();
-      setTimeout(() => {
-        this.handleAdoptSubmit();
-      }, 1000);
-    }, 5000);
-    setTimeout(() => {
-      this.handleDogAdopt();
-      setTimeout(() => {
-        this.handleAdoptSubmit();
-      }, 1000);
-    }, 10000);
-    setTimeout(() => {
-      this.handleCatAdopt();
-      setTimeout(() => {
-        this.handleAdoptSubmit();
-      }, 1000);
-    }, 15000);
-    setTimeout(() => {
-      ApiHelpers.addPerson('Moe Howard');
-      this.setState({ personListUpdated: true });
-    }, 20000);
-    setTimeout(() => {
-      ApiHelpers.addPerson('Shemp Howard');
-      this.setState({ personListUpdated: true });
-    }, 25000);
-    setTimeout(() => {
-      ApiHelpers.addPerson('Larry Fine');
-      this.setState({ personListUpdated: true });
-    }, 30000);
-    setTimeout(() => {
-      ApiHelpers.addPerson('Jerry Howard');
-      this.setState({ personListUpdated: true });
-    }, 35000);
+  //Issues to fix,
+  /**
+   * 
+   * It selects pet for user...
+   * 
+   */
+
+  handleStartDemo = (time = 6500) => {
+    //demo run
+    for (let i = 0; i < 20; i++) {
+
+      //Stops users listings when no more pets but only tested with empty list
+      if (this.state.usersTurn !== true) {
+        setTimeout(() => {
+
+          //random picks pet for person
+          let pet = randomPet();
+          if (pet === 'cat') {
+            if (this.state.cats.last === null) {
+              this.handleDogAdopt();
+            }
+            if (this.state.cats.last !== null) {
+              this.handleCatAdopt();
+            }
+          }
+          if (pet === 'dog') {
+            if (this.state.dogs.last === null) {
+              this.handleCatAdopt();
+            }
+            if (this.state.dogs.last !== null) {
+              this.handleDogAdopt();
+            }
+          }
+
+          //deletes pet from list after adoption
+          setTimeout(() => {
+            this.handleAdoptSubmit();
+          }, 1500);
+        }, time);
+
+        //adds a person to list
+        setTimeout(() => {
+          randomPerson();
+          this.setState({ personListUpdated: true });
+        }, time += 6500);
+      }
+    }
   };
 
   async handleAdoptSubmit() {
     const usersTurn = this.state.usersTurn;
     if (this.state.cat_adopt === true) {
+      if (usersTurn) {
+        this.setState({
+          adoptionStatus: `Contrats! You adopted ${this.state.cats.first.data.name}!`
+        })
+      }
       await ApiHelpers.deleteCat();
       this.setState({ cat_adopt: false, usersTurn: false });
       this.getCats();
-      if (usersTurn) {
-        alert('Adoption Successful!');
-      }
     }
     if (this.state.dog_adopt === true) {
+      if (usersTurn) {
+        this.setState({
+          adoptionStatus: `Contrats! You adopted ${this.state.dogs.first.data.name}!`
+        })
+      }
       await ApiHelpers.deleteDog();
       this.setState({ dog_adopt: false, usersTurn: false });
       this.getDogs();
-      if (usersTurn) {
-        alert('Adoption Successful!');
-      }
     }
     await ApiHelpers.deletePerson();
     this.handleUpdatePeopleList();
@@ -114,13 +134,11 @@ class Root extends React.Component {
   }
 
   render() {
-    console.log('UsersTurn', this.state.usersTurn);
-    console.log('Cat', this.state.cat_adopt);
-    console.log('Dog', this.state.dog_adopt);
     return (
       <>
         <Header />
         <hr />
+
         <main>
           <div className="pets-section">
             <Route
@@ -179,6 +197,8 @@ class Root extends React.Component {
                 </button>
               </div>
             )}
+          <hr />
+          {<h2>{this.state.adoptionStatus}</h2>}
         </main>
       </>
     );

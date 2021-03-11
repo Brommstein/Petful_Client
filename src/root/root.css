@@ -83,6 +83,10 @@ section {
   color: rgb(199, 199, 199);
 }
 
+main h2{
+  text-align: center;
+}
+
 @media all and (min-width: 600px) {
   section {
     flex-direction: row;

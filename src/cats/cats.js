@@ -1,5 +1,8 @@
 import React from 'react';
 
+let nextCat;
+let cats;
+
 class Cats extends React.Component {
   render() {
     const selected = () => {
@@ -9,35 +12,45 @@ class Cats extends React.Component {
         return 'unselected';
       }
     };
-    const cats = this.props.cats.first.data;
-    const nextCat = (
-      <div className={`pet-container ${selected()}`}>
-        <span>Catter Name: {cats.name}</span>
-        <br />
-        <img src={cats.imageURL} alt="A heartwarming, picturesque cat" />
-        <br />
-        <div className="words-container">
-          Age: {cats.age}
+    if (this.props.cats.last !== null) cats = this.props.cats.first.data;
+    if (this.props.cats.last === null) cats = null;
+    if (cats !== null) {
+      nextCat = (
+        <div className={`pet-container ${selected()}`}>
+          <span>Catter Name: {cats.name}</span>
           <br />
+          <img src={cats.imageURL} alt="A heartwarming, picturesque cat" />
+          <br />
+          <div className="words-container">
+            Age: {cats.age}
+            <br />
           Story: {cats.story}
-          <br />
+            <br />
           Breed: {cats.breed}
-          <br />
+            <br />
           Gender: {cats.gender}
-          <br />
+            <br />
           Description: {cats.description}
+          </div>
+          <br />
+          {this.props.usersTurn && (
+            <button
+              className="myButton"
+              onClick={() => this.props.handleCatAdopt()}
+            >
+              Adopt
+            </button>
+          )}
         </div>
-        <br />
-        {this.props.usersTurn && (
-          <button
-            className="myButton"
-            onClick={() => this.props.handleCatAdopt()}
-          >
-            Adopt
-          </button>
-        )}
-      </div>
-    );
+      );
+    }
+    if (cats === null) {
+      nextCat = (
+        <div className={`pet-container ${selected()}`}>
+          <h3>No more cats available for adoption!</h3>
+        </div>
+      );
+    }
     return <>{nextCat}</>;
   }
 }
